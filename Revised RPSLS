@@ -1,0 +1,118 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Random;
+
+public class RockPaperScissors {
+    public enum Choices {
+        ROCK("rock"),
+        PAPER("paper"),
+        SCISSORS("scissors"),
+        LIZARD("lizard"),
+        SPOCK("spock");
+
+        private String keyword;
+
+        private Choices(String keyword) {
+            this.keyword = keyword;
+        }
+
+        public String getKeyword() {
+            return keyword;
+        }
+    }
+
+    public void printUserOptions() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Input your choice of one of the following:");
+        for (Choices choice : Choices.values()) {
+            stringBuilder.append(" ");
+            stringBuilder.append(choice.getKeyword());
+        }
+        System.out.println(stringBuilder.toString());
+    }
+
+    public Choices getUserChoice()
+    {
+        boolean isUserChoiceValid = false;
+        BufferedReader bufferedReader = null;
+        Choices userChoice = null;
+        try {
+            bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+            do {
+                String userChoiceString = bufferedReader.readLine();
+                isUserChoiceValid = validateUserChoice(userChoiceString);
+                if (!isUserChoiceValid) {
+                    System.out.println("Please enter one of the valid options.");
+                } else {
+                    userChoice = Choices.valueOf(userChoiceString.toUpperCase());
+                }
+            } while (!isUserChoiceValid);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("There was an error while reading from input.", e);
+        } finally {
+            if (bufferedReader != null) {
+                try {
+                    bufferedReader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return userChoice;
+    }
+
+
+    public boolean validateUserChoice(String userChoice) {
+        for (Choices choice : Choices.values()) {
+            if (choice.getKeyword().equals(userChoice)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Choices getComputerChoice() {
+        return Choices.values()[new Random().nextInt(Choices.values().length)];
+    }
+
+    public void evaluateResult(Choices userChoice, Choices computerChoice) {
+        if (userChoice == computerChoice) {
+            System.out.println("It's a tie!");
+            return;
+        }
+
+        if ((userChoice == Choices.ROCK && computerChoice == Choices.PAPER)
+            || (userChoice == Choices.ROCK && computerChoice == Choices.SPOCK)
+            || (userChoice == Choices.PAPER && computerChoice == Choices.SCISSORS)
+            || (userChoice == Choices.PAPER && computerChoice == Choices.LIZARD)
+            || (userChoice == Choices.SCISSORS && computerChoice == Choices.ROCK)
+            || (userChoice == Choices.SCISSORS && computerChoice == Choices.SPOCK)
+            || (userChoice == Choices.LIZARD && computerChoice == Choices.ROCK)
+            || (userChoice == Choices.LIZARD && computerChoice == Choices.SCISSORS)
+            || (userChoice == Choices.SPOCK && computerChoice == Choices.LIZARD)
+            || (userChoice == Choices.SPOCK && computerChoice == Choices.PAPER)) {
+            System.out.println("The computer won.");
+        } else {
+            System.out.println("You won!");
+        }
+    }
+
+    public void execute() {
+        printUserOptions();
+        Choices userChoice = getUserChoice();
+        Choices computerChoice = getComputerChoice();
+
+        System.out.println("");
+        System.out.println("You picked: " + userChoice.getKeyword());
+        System.out.println("Computer picked: " + computerChoice.getKeyword());
+        System.out.println("");
+        evaluateResult(userChoice, computerChoice);
+    }
+
+    public static void main(String[] args) {
+        RockPaperScissors rockPaperScissors = new RockPaperScissors();
+        rockPaperScissors.execute();
+    }
+}
