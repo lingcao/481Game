@@ -1,72 +1,313 @@
+import java.util.Random;
+import java.util.Scanner;
+public class RockPaperScissorsLizardSpock
+{
+    // Constants
+    public static final String[] CONSTANT_MESSAGES =
+    	 {
+        /*
+         *  Who goes first?
+         */
+    	// Player goes first (0 - 6)
+        "You make your move first.",
+        "You go first.",
+        "I'll let you go first.",
+        "Go for your move!",
+        "Why don't you go first?",
+        "Please, make your first move.",
+        "Alright, let's see what your move is.",
+      
+        // CPU goes first (7 - 15)
+        "Why don't I go first?",
+        "I'm going first.",
+        "I go first.",
+        "I shall go first.",
+        "It will be my prior to make a move first.",
+        "You let me go first.",
+        "Mr. Computer shall go first.",
+        "Your CPU decides what move to pick primarily.",
+        "Let's see what my move will be...",
+      
+     
+        /*
+         *  Winner Messages (16 - 20)
+         */
+        "Awesome; you win! ",
+        "CPU surrenders! ",
+        "White flag for the CPU; ",
+        "Winner! ",
+        "WIN. ",
+      
+        /*
+         *  Loser Messages (21 - 25)
+         */
+        "Too bad, you lose! ",
+        "You lost. ",
+        "You lose! ",
+        "You are forced to surrender. ",
+        "LOSE. ",
+      
+        /*
+         *  No Winner Messages (26 - 31)
+         */
+        "No winner in this case!",
+        "We have a draw!",
+        "It looks like no one wins!",
+        "No winner!",
+        "A winner is ceased to exist!",
+        "Uh-oh, no winner.",
+     
+        /*
+         * Command Messages (32 - 41)
+         */
+        "Scissors cuts paper.",
+        "Paper covers rock.",
+        "Rock crushes lizard.",
+        "Lizard poisons Spock.",
+        "Spock smashes scissors.",
+        "Scissors decapitates lizard.",
+        "Lizard eats paper.",
+        "Paper disproves Spock.",
+        "Spock vaporizes rock.",
+        "Rock crushes scissors."
+      
+        };
+    public static final byte CHOICE_IS_ROCK = 0,
+            CHOICE_IS_PAPER = 1,
+            CHOICE_IS_SCISSORS = 2,
+            CHOICE_IS_LIZARD = 3,
+            CHOICE_IS_SPOCK = 4;
+    public static final Random aiObject = new Random();
+    public static final Scanner keyboardInput = new Scanner(System.in);
+    public static void main(String[] args)
+    {
+        /*
+         *  Declaration and Construction Phase
+         */
+        String messageString;
+        byte playersChoice, computersChoice;
+        boolean playAgain = false;
+        // Starting Message
+        System.out.println("Hello there!");
+        pauseProgram();
+        do
+        {
 
-	
+            /*
+             *  Input Phase
+             */
+        	 if (aiObject.nextBoolean()) // AI goes first
+             {
+                 System.out.println(CONSTANT_MESSAGES[aiObject.nextInt(9) + 7] + "\n\n");
+                 computersChoice = computerMakesMove();
+                 pauseProgram();
+                 playersChoice = playerMakesMove();
+             }
+             else
+             {
+                 System.out.println(CONSTANT_MESSAGES[aiObject.nextInt(7)] + "\n\n");
+                 pauseProgram();
+     
+                 playersChoice = playerMakesMove();
+     
+                 System.out.println("Please wait as the computer decides.\n");
+                 computersChoice = computerMakesMove();
+                 pauseProgram();
+             }
+             
+             /*
+              *  Process Phase
+              */
+        	 // Player's Streak
+             if (playersChoice == CHOICE_IS_SCISSORS && computersChoice == CHOICE_IS_PAPER)  
+                 // Scissors cuts paper
+                 messageString = CONSTANT_MESSAGES[aiObject.nextInt(5) + 16] + CONSTANT_MESSAGES[32];
+             else if (playersChoice == CHOICE_IS_PAPER && computersChoice == CHOICE_IS_ROCK)  
+                 // Paper covers rock
+                 messageString = CONSTANT_MESSAGES[aiObject.nextInt(5) + 16] + CONSTANT_MESSAGES[33];
+             else if (playersChoice == CHOICE_IS_ROCK && computersChoice == CHOICE_IS_LIZARD)  
+                 // Rock crushes lizard
+                 messageString = CONSTANT_MESSAGES[aiObject.nextInt(5) + 16] + CONSTANT_MESSAGES[34];
+             else if (playersChoice == CHOICE_IS_LIZARD && computersChoice == CHOICE_IS_SPOCK) 
+                 // Lizard poisons Spock
+                 messageString = CONSTANT_MESSAGES[aiObject.nextInt(5) + 16] + CONSTANT_MESSAGES[35];
+             else if (playersChoice == CHOICE_IS_SPOCK && computersChoice == CHOICE_IS_SCISSORS) 
+                 // Spock smashes scissors
+                 messageString = CONSTANT_MESSAGES[aiObject.nextInt(5) + 16] + CONSTANT_MESSAGES[36];
+             else if (playersChoice == CHOICE_IS_SCISSORS && computersChoice == CHOICE_IS_LIZARD)
+                 // Scissors decapitates lizard
+                 messageString = CONSTANT_MESSAGES[aiObject.nextInt(5) + 16] + CONSTANT_MESSAGES[37];
+             else if (playersChoice == CHOICE_IS_LIZARD && computersChoice == CHOICE_IS_PAPER) 
+                 // Lizard eats paper
+                 messageString = CONSTANT_MESSAGES[aiObject.nextInt(5) + 16] + CONSTANT_MESSAGES[38];
+             else if (playersChoice == CHOICE_IS_PAPER && computersChoice == CHOICE_IS_SPOCK)  
+                 // Paper disproves Spock
+                 messageString = CONSTANT_MESSAGES[aiObject.nextInt(5) + 16] + CONSTANT_MESSAGES[39];
+             else if (playersChoice == CHOICE_IS_SPOCK && computersChoice == CHOICE_IS_ROCK)  
+                 // Spock vaporizes rock
+                 messageString = CONSTANT_MESSAGES[aiObject.nextInt(5) + 16] + CONSTANT_MESSAGES[40];
+             else if (playersChoice == CHOICE_IS_ROCK && computersChoice == CHOICE_IS_SCISSORS)
+                 // Rock crushes scissors
+                 messageString = CONSTANT_MESSAGES[aiObject.nextInt(5) + 16] + CONSTANT_MESSAGES[41];
+          // CPU Streak
+             else if (playersChoice == CHOICE_IS_PAPER && computersChoice == CHOICE_IS_SCISSORS) 
+                 // Scissors cuts paper
+                 messageString = CONSTANT_MESSAGES[aiObject.nextInt(5) + 21] + CONSTANT_MESSAGES[32];
+             else if (playersChoice == CHOICE_IS_ROCK && computersChoice == CHOICE_IS_PAPER)  
+                 // Paper covers rock
+                 messageString = CONSTANT_MESSAGES[aiObject.nextInt(5) + 21] + CONSTANT_MESSAGES[33];
+             else if (playersChoice == CHOICE_IS_LIZARD && computersChoice == CHOICE_IS_ROCK)  
+                 // Rock crushes lizard
+                 messageString = CONSTANT_MESSAGES[aiObject.nextInt(5) + 21] + CONSTANT_MESSAGES[34];
+             else if (playersChoice == CHOICE_IS_SPOCK && computersChoice == CHOICE_IS_LIZARD) 
+                 // Lizard poisons Spock
+                 messageString = CONSTANT_MESSAGES[aiObject.nextInt(5) + 21] + CONSTANT_MESSAGES[35];
+             else if (playersChoice == CHOICE_IS_SCISSORS && computersChoice == CHOICE_IS_SPOCK) 
+                 // Spock smashes scissors
+                 messageString = CONSTANT_MESSAGES[aiObject.nextInt(5) + 21] + CONSTANT_MESSAGES[36];
+             else if (playersChoice == CHOICE_IS_LIZARD && computersChoice == CHOICE_IS_SCISSORS)
+                 // Scissors decapitates lizard
+                 messageString = CONSTANT_MESSAGES[aiObject.nextInt(5) + 21] + CONSTANT_MESSAGES[37];
+             else if (playersChoice == CHOICE_IS_PAPER && computersChoice == CHOICE_IS_LIZARD) 
+                 // Lizard eats paper
+                 messageString = CONSTANT_MESSAGES[aiObject.nextInt(5) + 21] + CONSTANT_MESSAGES[38];
+             else if (playersChoice == CHOICE_IS_SPOCK && computersChoice == CHOICE_IS_PAPER)  
+                 // Paper disproves Spock
+                 messageString = CONSTANT_MESSAGES[aiObject.nextInt(5) + 21] + CONSTANT_MESSAGES[39];
+             else if (playersChoice == CHOICE_IS_ROCK && computersChoice == CHOICE_IS_SPOCK)  
+                 // Spock vaporizes rock
+                 messageString = CONSTANT_MESSAGES[aiObject.nextInt(5) + 21] + CONSTANT_MESSAGES[40];
+             else if (playersChoice == CHOICE_IS_SCISSORS && computersChoice == CHOICE_IS_ROCK)
+                 // Rock crushes scissors
+                 messageString = CONSTANT_MESSAGES[aiObject.nextInt(5) + 21] + CONSTANT_MESSAGES[41];
+    
+             // No winner 
+             else
+                 messageString = CONSTANT_MESSAGES[aiObject.nextInt(6) + 26];
+     
+     
+             /*
+              *  Output Phase
+              */
 
-	import java.util.*;
-	import java.lang.*;
-	import java.io.*;
-	import java.util.Scanner;
-	import java.util.Random;
+             System.out.println(messageString);
 
-	
-	public class SPRGame {
-		public static void main(String[] args) throws java.lang.Exception {
-			Scanner keyboard = new Scanner(System. in );
-			Random rnd = new Random();
-			int input;
-			int B = 1;
-			System.out.println("Welcome to game world!");
-			System.out.println("You can play scissor, paper and rock game with this computer, we will see who is the greatest!");
+             pauseProgram();
+    
+             playAgain = playGameAgain();
+        } while(playAgain);
+        
+        
+        
+        // Closing Phase
+        System.out.println("\nThank you for playing!");
+        keyboardInput.close();
+    }
+    
+    public static void pauseProgram()
+    {
+        try
+        {
+            Thread.sleep(2000);
+        }
+        catch (InterruptedException ex)
+        {
+        	ex.printStackTrace();
+            System.exit(1);
+        }
+    }
+ 
+    public static byte playerMakesMove()
+    {
+        String inputString;
+        boolean entryIsValid = true;
+  
+        do
+        {
+            System.out.print("\n\n\nEnter a number corresponding to your move:\n\n"
+                 + "0: Rock\n"
+                 + "1: Paper\n"
+                 + "2: Scissors\n"
+                 + "3: Lizard\n"
+                 + "4: Spock\n\n"
+                 + "Your entry: ");
+   
+            inputString = keyboardInput.nextLine();
+            if (!inputString.equals(""))
+            {
+                if (inputString.length() > 1)
+                    System.out.println("\nInput error: Too long. Please enter only one character.");
+                else
+                {
+                    entryIsValid = true;
+    
+                    if (inputString.charAt(0) < 48 || inputString.charAt(0) > 52)
+                    {
+                        entryIsValid = false;
+                        System.out.println("\nInput error: Does not correspond to the choices given. Please "
+                            + "enter a value corresponding to one of them.");
+                    }
+                }
+            }
+            else
+                System.out.println("\nInput error: No input. Please enter again.");
+        } while(inputString.equals("") || inputString.length() > 1 || !entryIsValid);
+        
+        System.out.println("\nInput accepted.\n\n");
+        if (inputString.equals("0"))
+            return CHOICE_IS_ROCK;
+        else if (inputString.equals("1"))
+            return CHOICE_IS_PAPER;
+        else if (inputString.equals("2"))
+            return CHOICE_IS_SCISSORS;
+        else if (inputString.equals("3"))
+            return CHOICE_IS_LIZARD;
+        else
+            return CHOICE_IS_SPOCK;
+    }
+ 
+    public static byte computerMakesMove()
+    {
+        return (byte)(aiObject.nextInt(5));
+    }
+    
+    public static boolean playGameAgain()
+    {
+        String inputString;
+        boolean inputIsGood = true;
+   
+        do
+        {
+            System.out.print("\n\n\nWould you like to play the game again?\n\n"
+                 + "Please enter a character corresponding to one of the choices:\n"
+                 + "0: Yes\n"
+                 + "1: No\n\nYour entry: ");
+            inputString = keyboardInput.nextLine();
 
-			System.out.println("Pick 1,2, or 3 for:");
-			System.out.println("ROCK (1), PAPER(2), or SCISSOR (3)");
-			while (B != 0) {
-				
-				int Rock = 1, Paper = 2, Scissor = 3;
+            if (inputString.equals(""))
+                System.out.println("\nInput error: No input. Please enter again.");
+            else
+            {
+                inputIsGood = true;
+     
+                if (inputString.length() > 1)
+                    System.out.println("\nInput error: Too long. Please enter only one character.");
+                else if (inputString.charAt(0) != '0' && inputString.charAt(0) != '1')
+                {
+                    System.out.println("\nInput error: Does not correspond to the choices given. Please enter a "
+                        + "value corresponding to one of them.");
+                    inputIsGood = false;
+                }
+            } 
+        } while(inputString.equals("") || inputString.length() > 1 || !inputIsGood);
+   
+        if (inputString.charAt(0) == '0')
+            return true;
+        else
+            return false;
+    	}
+    }
 
-				input = keyboard.nextInt();
-				int randomNumber = rnd.nextInt(3 - 1 + 1) + 1;
-				if (randomNumber == Rock) {
-					if (input == Rock) {
-						System.out.println("Rock Vs. Rock: TIE");
-					} else if (input == Paper) {
-						System.out.println("Paper Vs. Rock: YOU WIN");
-					} else if (input == Scissor) {
-						System.out.println("Scissor Vs. Rock: YOU LOSE");
-					}
-				} else if (randomNumber == Paper) {
-					if (input == Rock) {
-						System.out.println("Rock Vs. Paper: YOU LOSE");
-					} else if (input == Paper) {
-						System.out.println("Paper Vs. Paper: TIE");
-					} else if (input == Scissor) {
-						System.out.println("Scissor Vs. Paper: YOU WIN");
-					}
+        
 
-				} else if (randomNumber == Scissor) {
-					if (input == Rock) {
-						System.out.println("Rock Vs. Scissor: YOU WIN");
-					} else if (input == Paper) {
-						System.out.println("Paper Vs. Scissor: YOU LOSE");
-					} else if (input == Scissor) {
-						System.out.println("Scissor Vs. Scissor: TIE");
-					}
-				}
-
-	    int Y=8, N=9;
-	    	System.out.println("Do you want to play again? Y(8)/N(9)");
-	    input = keyboard.nextInt();
-	    if(input==Y){
-	      B=1;	
-	      System.out.println("Rock, Paper,SCISSOR");
-	    }
-	    else if(input==N)
-	    {System.exit(0);
-	    	System.out.println("Thank you, See you next time!");
-			}
-
-		}
-		}
-		
-	} 
-
-
+      
